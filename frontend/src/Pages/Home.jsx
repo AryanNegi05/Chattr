@@ -1,6 +1,6 @@
 import React from 'react'
-import Sidebar from '../components/SideBar'
-import MessageArea from '../components/MessageArea'
+import Sidebar from '../Components/SideBar'
+import MessageArea from '../Components/MessageArea'
 import { useSelector } from 'react-redux'
 import getMessage from '../Hooks/getMessages'
 
