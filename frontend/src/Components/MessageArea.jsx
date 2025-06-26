@@ -9,7 +9,7 @@ import { RiSendPlane2Fill } from "react-icons/ri";
 import { useNavigate } from 'react-router-dom';
 import EmojiPicker from 'emoji-picker-react'
 import SenderMessage from './SenderMessage';
-import ReceiverMessage from './ReceiverMessage';
+import ReceiverMessage from './RecieverMessage';
 import { serverUrl } from '../config';
 import { useRef } from 'react';
 import axios from 'axios';

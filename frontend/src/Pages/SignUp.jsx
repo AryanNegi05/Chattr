@@ -18,8 +18,10 @@ function SignUp() {
         e.preventDefault()
         setLoading(true)
         try{
+            console.log(userName ,email,password);
             let result=await axios.post(`${serverUrl}/api/auth/signup`,{userName,email,password},{withCredentials: true})
             dispatch(setUserData(result.data))
+
             navigate("/profile")
             setEmail("")
             setPassword("")

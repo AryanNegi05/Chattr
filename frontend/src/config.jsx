@@ -1,1 +1,1 @@
-export const serverUrl = "https://chatly-qc4w.onrender.com";
+export const serverUrl = "http://localhost:4000";
