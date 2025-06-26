@@ -6,7 +6,7 @@ let app=express()
 const server=http.createServer(app)
 const io=new Server(server,{
     cors:{
-        origin:"https://chattr-six.vercel.app/"
+        origin:"https://chattr-six.vercel.app"
     }
 })
  const userSocketMap = {}
