@@ -1,1 +1,1 @@
-export const serverUrl = "https://chattr-tn9r.onrender.com/";
+export const serverUrl = "https://chattr-tn9r.onrender.com";
