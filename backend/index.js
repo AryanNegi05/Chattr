@@ -13,8 +13,8 @@ const port=process.env.PORT || 5000
 
 
 app.use(cors({
-    origin:"*",
-    credentials:true
+    origin:"*"
+    // credentials:true
 }))
 app.use(express.json())
 app.use(cookieParser())
