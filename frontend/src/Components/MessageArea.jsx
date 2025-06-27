@@ -14,6 +14,7 @@ import { serverUrl } from '../config';
 import { useRef } from 'react';
 import axios from 'axios';
 import { setMessages } from '../redux/messageSlice';
+
 function MessageArea() {
     let navigate=useNavigate()
     let {selectedUser,userData,socket}=useSelector(state=>state.user)
@@ -24,6 +25,7 @@ function MessageArea() {
     let [backendImage,setBackendImage]=useState(null)
     let image=useRef()
     let {messages}=useSelector(state=>state.message)
+    
     const handleImage=(e)=>{
         let file=e.target.files[0]
         setBackendImage(file)
@@ -52,9 +54,10 @@ function MessageArea() {
             console.log(error)
         }
     }
+    
     const onEmojiClick = (emojiData)=>{
         setInput(prevInput=>prevInput+emojiData.emoji)
-        setShowPicker(false )
+        setShowPicker(false)
     }
 
     useEffect(()=>{
@@ -64,55 +67,115 @@ function MessageArea() {
         return ()=>socket.off("newMessage")
     },[messages,setMessages])
 
-  return (
-    <div className={`lg:w-[70%] ${selectedUser?"flex":"hidden"} lg:flex w-full h-full bg-slate-200 border-l-2 border-gray-300 `}>
-        {selectedUser && 
-        <div className='w-full h-[100vh] flex flex-col'>
-        <div className='w-full h-[100px] bg-[#1797c2] rounded-b-[30px] shadow-lg gap-[20px] flex items-center px-[20px]'>
-            <div className='cursor-pointer' onClick={()=>dispatch(setSelectedUser(null))}>
-                <IoIosArrowRoundBack className=' w-[40px] h-[40px] text-white'/>
-            </div>
-            <div className='w-[50px] h-[50px] rounded-full overflow-hidden flex justify-center items-center bg-white cursor-pointer shadow-gray-500 shadow-lg' onClick={()=>navigate("/profile")}>
-                <img src={ selectedUser?.image || dp} alt="" className='h-[100%]'/>
-            </div>
-            <h1 className='text-white font-bold text-[25px]'>{selectedUser?.name||"user"}</h1>
-        </div>
+    return (
+        <div className={`lg:w-[70%] ${selectedUser?"flex":"hidden"} lg:flex w-full h-full bg-gradient-to-br from-slate-50 to-gray-100`}>
+            {selectedUser && 
+            <div className='w-full h-full flex flex-col'>
+                {/* Header */}
+                <div className='w-full h-[70px] bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg gap-4 flex items-center px-6 flex-shrink-0'>
+                    <button 
+                        className='p-2 hover:bg-white/10 rounded-full transition-colors duration-200' 
+                        onClick={()=>dispatch(setSelectedUser(null))}
+                    >
+                        <IoIosArrowRoundBack className='w-6 h-6 text-white'/>
+                    </button>
+                    <div className='w-10 h-10 rounded-full overflow-hidden flex justify-center items-center bg-white/20 backdrop-blur-sm cursor-pointer shadow-md hover:shadow-lg transition-all duration-200' onClick={()=>navigate("/profile")}>
+                        <img src={selectedUser?.image || dp} alt="" className='h-full w-full object-cover'/>
+                    </div>
+                    <div className='flex flex-col'>
+                        <h1 className='text-white font-semibold text-lg'>{selectedUser?.name||"user"}</h1>
+                        <span className='text-white/70 text-sm'>Online</span>
+                    </div>
+                </div>
 
-        <div className='w-full h-[70%] flex flex-col py-[30px] px-[20px] overflow-auto gap-[20px]'>
-            {showPicker && <div className='absolute bottom-[120px] left-[20px]'>
-                <EmojiPicker width={250} height={350} className='shadow-lg z-[100]' onEmojiClick={onEmojiClick}/>
-            </div>}
-            {messages && messages.map((mess)=>(
-                mess.sender==userData._id?<SenderMessage image={mess.image} message={mess.message}/>:<ReceiverMessage image={mess.image} message={mess.message}/>
-            ))}
-        </div>
-        </div>
-        }
-        {selectedUser && <div className='w-full lg:w-[70%] h-[100px] fixed bottom-[20px] flex items-center justify-center'>
-            <img src={frontendImage} alt="" className='w-[80px] absolute bottom-[100px] right-[20%] rounded-lg shadow-gray-400 shadow-lg'/>
-            <form className='w-[95%] lg:w-[70%] h-[60px] bg-[#1797c2] shadow-gray-400 shadow-lg rounded-full flex items-center gap-[20px] px-[20px]' onSubmit={handleSendMessage}>
-                <div onClick={()=>setShowPicker(prev=>!prev)}>
-                    <RiEmojiStickerLine className='w-[25px] h-[25px] text-white cursor-pointer'/>
+                {/* Messages Area */}
+                <div className='flex-1 flex flex-col py-4 px-4 overflow-auto gap-4 relative min-h-0'>
+                    {showPicker && 
+                        <div className='absolute bottom-4 left-4 z-50'>
+                            <EmojiPicker width={300} height={400} onEmojiClick={onEmojiClick}/>
+                        </div>
+                    }
+                    <div className='flex-1 space-y-4 pb-4'>
+                        {messages && messages.map((mess, index)=>(
+                            <div key={index}>
+                                {mess.sender==userData._id
+                                    ? <SenderMessage image={mess.image} message={mess.message}/>
+                                    : <ReceiverMessage image={mess.image} message={mess.message}/>
+                                }
+                            </div>
+                        ))}
+                    </div>
                 </div>
-                <input type="file" accept='image/*' ref={image} hidden onChange={handleImage}/>
-                <input type="text" placeholder='Message' className='w-full h-full text-white bg-transparent placeholder-white' onChange={(e)=>setInput(e.target.value)} value={input}/>
-                <div onClick={()=>image.current.click()}>
-                    <FaImages className='w-[25px] h-[25px] text-white cursor-pointer'/>
+
+                {/* Message Input */}
+                <div className='w-full px-4 pb-4 flex-shrink-0'>
+                    {frontendImage && 
+                        <div className='mb-3 flex justify-end'>
+                            <div className='relative bg-white p-2 rounded-lg shadow-lg max-w-xs'>
+                                <img src={frontendImage} alt="" className='w-20 h-20 object-cover rounded-lg'/>
+                                <button 
+                                    className='absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 transition-colors flex items-center justify-center'
+                                    onClick={() => {setFrontendImage(null); setBackendImage(null)}}
+                                >
+                                    ×
+                                </button>
+                            </div>
+                        </div>
+                    }
+                    <form className='w-full h-14 bg-white border border-gray-200 shadow-lg rounded-full flex items-center gap-3 px-4' onSubmit={handleSendMessage}>
+                        <button 
+                            type="button"
+                            className='p-2 hover:bg-gray-100 rounded-full transition-colors duration-200 flex-shrink-0'
+                            onClick={()=>setShowPicker(prev=>!prev)}
+                        >
+                            <RiEmojiStickerLine className='w-5 h-5 text-gray-600'/>
+                        </button>
+                        
+                        <input type="file" accept='image/*' ref={image} hidden onChange={handleImage}/>
+                        
+                        <input 
+                            type="text" 
+                            placeholder='Type a message...' 
+                            className='flex-1 h-full text-gray-800 bg-transparent placeholder-gray-500 outline-none' 
+                            onChange={(e)=>setInput(e.target.value)} 
+                            value={input}
+                        />
+                        
+                        <button 
+                            type="button"
+                            className='p-2 hover:bg-gray-100 rounded-full transition-colors duration-200 flex-shrink-0'
+                            onClick={()=>image.current.click()}
+                        >
+                            <FaImages className='w-5 h-5 text-gray-600'/>
+                        </button>
+                        
+                        {(input.length>0 || backendImage!=null) && 
+                            <button 
+                                type="submit"
+                                className='p-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 rounded-full transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0'
+                            >
+                                <RiSendPlane2Fill className='w-5 h-5 text-white'/>
+                            </button>
+                        }
+                    </form>
                 </div>
-                {(input.length>0 || backendImage!=null) && <button>
-                    <RiSendPlane2Fill className='w-[25px] h-[25px] text-white cursor-pointer'/>
-                </button>}
-            </form>
-        </div>}
-        {!selectedUser && 
-            <div className='w-full h-full flex flex-col justify-center items-center'>
-                <h1 className='text-gray-700 font-bold text-[50px]'>Welcome to Chatly</h1>
-                <span className='text-gray-700 font-semibold text-[30px]'>Chat Friendly...</span>
             </div>
-        }
-        
-    </div> 
-  )
+            }
+            
+            {/* Welcome Screen */}
+            {!selectedUser && 
+                <div className='w-full h-full flex flex-col justify-center items-center bg-gradient-to-br from-indigo-50 to-purple-50'>
+                    <div className='text-center space-y-4'>
+                        <div className='w-24 h-24 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg'>
+                            <span className='text-white text-2xl font-bold'>C</span>
+                        </div>
+                        <h1 className='text-gray-800 font-bold text-4xl'>Welcome to Chatly</h1>
+                        <p className='text-gray-600 text-lg'>Select a conversation to start chatting</p>
+                    </div>
+                </div>
+            }
+        </div> 
+    )
 }
 
 export default MessageArea
