@@ -13,7 +13,7 @@ const port=process.env.PORT || 5000
 
 
 app.use(cors({
-    origin:"https://chattr-six.vercel.app",
+    origin:"*",
     credentials:true
 }))
 app.use(express.json())
