@@ -169,7 +169,7 @@ function MessageArea() {
                         <div className='w-24 h-24 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg'>
                             <span className='text-white text-2xl font-bold'>C</span>
                         </div>
-                        <h1 className='text-gray-800 font-bold text-4xl'>Welcome to Chatly</h1>
+                        <h1 className='text-gray-800 font-bold text-4xl'>Welcome to Chattr</h1>
                         <p className='text-gray-600 text-lg'>Select a conversation to start chatting</p>
                     </div>
                 </div>
