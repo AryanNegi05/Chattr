@@ -54,7 +54,7 @@ function Login() {
               </svg>
             </div>
             <h1 className='text-3xl font-bold text-white mb-2 animate-in slide-in-from-left-4 duration-700 delay-500'>Welcome Back</h1>
-            <p className='text-indigo-100 text-sm animate-in slide-in-from-right-4 duration-700 delay-700'>Sign in to continue to <span className='font-semibold'>Chatly</span></p>
+            <p className='text-indigo-100 text-sm animate-in slide-in-from-right-4 duration-700 delay-700'>Sign in to continue to <span className='font-semibold'>Chattr</span></p>
           </div>
         </div>
 
