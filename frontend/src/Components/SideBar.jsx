@@ -151,7 +151,7 @@ function Sidebar() {
                 
                 
                 <div className='relative z-10'>
-                    <h1 className='text-white font-bold text-2xl mb-4'>Chatly</h1>
+                    <h1 className='text-white font-bold text-2xl mb-4'>Chattr</h1>
                     <div className='flex justify-between items-center mb-4'>
                         <div>
                             <h2 className='text-white font-semibold text-lg'>Hi, {userData?.name || "User"}!</h2>
